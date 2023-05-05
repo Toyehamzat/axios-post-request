@@ -1,21 +1,41 @@
 import styled from "styled-components";
 import { useState } from "react";
+import axios from "axios";
+
 export default function Main() {
+  const [name, SetName] = useState("");
 
-    const[name,SetName]=useState()
+  const [password, SetPassword] = useState("");
 
-    const[password,SetPassword]=useState()
+  const url = 'https://core.development.4traderx.com/login';
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(url,{ name: name, password: password });
+      console.log(response.data);
+    }catch (error) {
+      console.log(error.response);
+    }
+  };
 
   return (
-    <FormContainer>
+    <FormContainer onSubmit={handleSubmit}>
       <Form>
         <Label>Name</Label>
-        <InputField type="text" />
+        <InputField
+          type="text"
+          value={name}
+          onChange={(e) => SetName(e.target.value)}
+        />
       </Form>
       <Form>
         <Label>Password</Label>
-        <InputField type="password" />
+        <InputField
+          type="password"
+          value={password}
+          onChange={(e) => SetPassword(e.target.value)}
+        />
       </Form>
       <Button type="submit">Login</Button>
     </FormContainer>
@@ -42,9 +62,7 @@ const InputField = styled.input`
   background-color: #f6f6f6;
   border-radius: 5px;
   outline: none;
-
 `;
-
 
 const Form = styled.div`
   text-align: left;
@@ -53,7 +71,7 @@ const Form = styled.div`
 `;
 
 const Button = styled.button`
-  background-color:purple;
+  background-color: purple;
   color: white;
   font-weight: 700;
   cursor: pointer;
